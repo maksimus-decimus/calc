@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 public class UI {
     public static JFrame createFrame() {
-        // Create a JLabel with an image icon
+        
         JLabel label = new JLabel();
         ImageIcon image2Icon = new ImageIcon("src/logo.png");
         label.setText("Balatradora");
@@ -20,7 +20,7 @@ public class UI {
         label.setBounds(0,0,250,250);
        
 
-        // Create a new JFrame
+       
         JFrame frame = new JFrame();
         frame.setLayout(null);
         frame.setTitle("Botón de ejemplo");
@@ -33,13 +33,12 @@ public class UI {
         Image originalImage = originalIcon.getImage();
         
 
-        // Scale the image to fit the button
-        int desiredWidth = 150;  // Set the desired width
-        int desiredHeight = 50; // Set the desired height
+       // boton mal escalao
+        int desiredWidth = 150;  
+        int desiredHeight = 50; 
         Image scaledImage = originalImage.getScaledInstance(desiredWidth, desiredHeight, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-        // Create a button with the scaled image
         JButton button = new JButton(scaledIcon);
         Dimension buttonSize = new Dimension(scaledIcon.getIconWidth(), scaledIcon.getIconHeight()); // Set button size to image size
         button.setPreferredSize(buttonSize);
@@ -51,8 +50,8 @@ public class UI {
 
 
 
-        int frameWidth = 420;  // Frame width
-        int frameHeight = 640; // Frame height
+        int frameWidth = 420;  
+        int frameHeight = 640; 
         int buttonWidth = buttonSize.width;
         int buttonHeight = buttonSize.height;
         int x = (frameWidth - buttonWidth) / 2;
@@ -62,8 +61,8 @@ public class UI {
 
         ImageIcon orImageIcon2 = new ImageIcon("src/boton2.png");
         Image originalImage2 = orImageIcon2.getImage();
-        int desiredWidth2 = 150;  // Set the desired width
-        int desiredHeight2 = 50; // Set the desired height
+        int desiredWidth2 = 150;  // cambiar dimensiones botn
+        int desiredHeight2 = 50; // cambiar dimensiones botn
         Image scaledImage2 = originalImage2.getScaledInstance(desiredWidth2, desiredHeight2, Image.SCALE_SMOOTH);
 
         ImageIcon scaledIcon2 = new ImageIcon(scaledImage2);
@@ -76,8 +75,8 @@ public class UI {
         button2.setFocusPainted(false);
         button2.setContentAreaFilled(false);
 
-        int frameWidth2 = 420;  // Frame width 
-        int frameHeight2 = 640; // Frame height
+        int frameWidth2 = 420;  
+        int frameHeight2 = 640; 
         int buttonWidth2 = buttonSize2.width;
         int buttonHeight2 = buttonSize2.height;
         int x2 = (frameWidth2 - buttonWidth2) / 2;
@@ -93,7 +92,7 @@ public class UI {
 
 
 
-        // Set the icon image
+        // ICONO DEL PROGRAMA
         ImageIcon image = new ImageIcon("src/logo.png");
         frame.setIconImage(image.getImage());
         
