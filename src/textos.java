@@ -4,8 +4,11 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 
 import java.awt.Color;
+import java.awt.RenderingHints.Key;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class textos {
 
@@ -25,8 +28,7 @@ public class textos {
             @Override
             public void focusGained(FocusEvent e) {
                 if (textito.getText().equals("Escribe algo 1")) {
-                    textito.setText("");
-                    textito.setForeground(Color.BLACK);
+                    
                 }
             }
 
@@ -38,6 +40,28 @@ public class textos {
                 }
             }
         });
+
+        textito.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+               if (textito.getText().equals("Escribe algo 1")) {
+                    textito.setText("");
+                    textito.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // No es necesario implementar
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // No es necesario implementar
+            }
+            
+        });
+        
 
         frame.add(textito);
 
@@ -52,8 +76,7 @@ public class textos {
             @Override
             public void focusGained(FocusEvent e) {
                 if (textazo.getText().equals("Escribe algo 2")) {
-                    textazo.setText("");
-                    textazo.setForeground(Color.BLACK);
+                    
                 }
             }
 
@@ -64,6 +87,28 @@ public class textos {
                     textazo.setText("Escribe algo 2");
                 }
             }
+        });
+
+        textazo.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (textazo.getText().equals("Escribe algo 2")) {
+                    textazo.setText("");
+                    textazo.setForeground(Color.BLACK);
+                    
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // No es necesario implementar
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // No es necesario implementar
+            }
+            
         });
         frame.add(scrollPane);
 
