@@ -1,24 +1,21 @@
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 
 public class UI {
     public static JFrame createFrame() {
         
-        JLabel label = new JLabel();
-        ImageIcon image2Icon = new ImageIcon("src/logo.png");
-        label.setText("Balatradora");
-        label.setIcon(image2Icon);
-        label.setHorizontalTextPosition(JLabel.LEFT);
-        label.setVerticalTextPosition(JLabel.TOP);
-        label.setBounds(0,0,250,250);
-       
 
        
         JFrame frame = new JFrame();
@@ -86,10 +83,49 @@ public class UI {
         
         frame.add(button2);
         frame.add(button);
-        frame.add(label);
+
+
+        //radio
+        JRadioButton radioButton = new JRadioButton("Java");
+        JRadioButton radioButton2 = new JRadioButton("Python");
+        JRadioButton radioButton3 = new JRadioButton("C++");
+        
+        ButtonGroup grupo = new ButtonGroup();
+        grupo.add(radioButton);
+        grupo.add(radioButton2);
+        grupo.add(radioButton3);
+
+        int radioX = frameWidth / 2 - 50;
+        int radioY = y2 + buttonHeight2 + 20;
+        int verticalSpacing = 30; // Espacio vertical entre los botones de radio
+
+        radioButton.setBounds(radioX, radioY, 100, 30);
+        radioButton2.setBounds(radioX, radioY + verticalSpacing, 100, 30);
+        radioButton3.setBounds(radioX, radioY + 2 * verticalSpacing, 100, 30);
+
+        frame.add(radioButton);
+        frame.add(radioButton2);        
+        frame.add(radioButton3);
+
+        JLabel labelradios = new JLabel("Lenguaje de programacion");
+        labelradios.setBounds(radioX, radioY - 30, 150, 20); // Ajustar la posición según sea necesario
+        frame.add(labelradios);
+
+        //texto
+        JTextArea TEXTO = new JTextArea();
+        TEXTO.setBounds(radioX, radioY + 3 * verticalSpacing + 10, 150, 30);
+        frame.add(TEXTO);
+
+        JTextArea TEXTOGRANDE = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(TEXTOGRANDE);
+        TEXTOGRANDE.setBounds(radioX, radioY + 4 * verticalSpacing + 10, 150, 100);
+        scrollPane.setBounds(radioX, radioY + 4 * verticalSpacing + 10, 150, 100);
+        frame.add(scrollPane);
+
+
+
+       
         frame.setVisible(true);
-
-
 
 
         // ICONO DEL PROGRAMA
