@@ -8,17 +8,17 @@ public class lista_desplegable {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Lista Desplegable de Lenguajes");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new GridLayout(2, 1)); // GridLayout para organizar en filas
+        frame.setLayout(new GridLayout(2, 1)); // fila 1
 
-        // Panel para la etiqueta y el lenguaje seleccionado
+        // lenguaje y seleccion
         JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel label = new JLabel("Lenguaje seleccionado: ");
         labelPanel.add(label);
-        JLabel selectedLanguageLabel = new JLabel("Ninguno"); // Inicialmente "Ninguno"
+        JLabel selectedLanguageLabel = new JLabel("Ninguno"); // seleccion
         labelPanel.add(selectedLanguageLabel);
         frame.add(labelPanel);
 
-        // Panel para la lista desplegable y el botón
+        // lista desplegable y botón
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         String[] languages = {"Java", "Python", "C++"};
         JComboBox<String> comboBox = new JComboBox<>(languages);
@@ -28,7 +28,7 @@ public class lista_desplegable {
         panel.add(selectButton);
         frame.add(panel);
 
-        // ActionListener para el botón "Seleccionar"
+        // eventos para cambiar el texto
         selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
