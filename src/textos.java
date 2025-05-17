@@ -16,13 +16,13 @@ public class textos {
 
         JFrame frame = new JFrame("Campos de Texto");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null); // Usamos null layout para posicionamiento absoluto
+        frame.setLayout(null); // queda feo sin esto
         frame.setSize(400, 300);
 
         // Campo de texto pequeño
         JTextField textito = new JTextField("Escribe algo 1");
         textito.setForeground(Color.GRAY);
-        textito.setBounds(50, 50, 300, 30); // x, y, ancho, alto
+        textito.setBounds(50, 50, 300, 30); 
 
         textito.addFocusListener(new FocusListener() {
             @Override
@@ -52,12 +52,12 @@ public class textos {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                // No es necesario implementar
+                // sin esto peta 
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                // No es necesario implementar
+                
             }
             
         });
@@ -70,7 +70,7 @@ public class textos {
         textazo.setForeground(Color.GRAY);
 
         JScrollPane scrollPane = new JScrollPane(textazo);
-        scrollPane.setBounds(50, 90, 300, 150); // x, y, ancho, alto
+        scrollPane.setBounds(50, 90, 300, 150); 
 
         textazo.addFocusListener(new FocusListener() {
             @Override
@@ -101,12 +101,12 @@ public class textos {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                // No es necesario implementar
+                
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                // No es necesario implementar
+                
             }
             
         });
