@@ -11,6 +11,7 @@ import javax.sound.sampled.Clip;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 
 public class kesuanji implements ActionListener {
 
@@ -18,6 +19,7 @@ public class kesuanji implements ActionListener {
     JTextField textField;
     JTextArea historyArea; // Área de texto para el historial
     JScrollPane historyScrollPane; // Scroll para el historial
+    JLabel gifLabel; // Label para mostrar el GIF
 
     JButton[] numberButtons = new JButton[10];
     JButton[] functionButtons = new JButton[10]; // Aumentar el tamaño para el botón de borrar historial
@@ -36,7 +38,7 @@ public class kesuanji implements ActionListener {
     kesuanji() {
         frame = new JFrame("Calculadora CASIO");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 800); // Aumentar el tamaño para el historial
+        frame.setSize(400, 700); // Aumentar el tamaño para el historial
         frame.setLayout(null);
 
         // Cargar la imagen de fondo
@@ -74,6 +76,12 @@ public class kesuanji implements ActionListener {
         historyScrollPane.setBounds(50, 490, 300, 150); // Ajustar la posición y el tamaño
         backgroundPanel.add(historyScrollPane); // Agregar al backgroundPanel
 
+        // Label para mostrar el GIF
+        gifLabel = new JLabel();
+        gifLabel.setBounds(50, 100, 300, 300); // Ajustar la posición y el tamaño
+        gifLabel.setVisible(false); // Inicialmente invisible
+        backgroundPanel.add(gifLabel); // Agregar al backgroundPanel
+
         addButton = new JButton("+");
         subButton = new JButton("-");
         mulButton = new JButton("*");
@@ -84,6 +92,32 @@ public class kesuanji implements ActionListener {
         clrButton = new JButton("CE");
         negButton = new JButton("(-)");
         clearHistoryButton = new JButton("Limpiar"); // Botón para borrar historial
+
+        // Establecer el color de fondo a gris y el color de texto a blanco
+        Color buttonBackgroundColor = Color.LIGHT_GRAY;
+        Color buttonForegroundColor = Color.WHITE;
+
+        // Establecer el color de fondo y el color de texto para los botones de función
+        addButton.setBackground(buttonBackgroundColor);
+        addButton.setForeground(buttonForegroundColor);
+        subButton.setBackground(buttonBackgroundColor);
+        subButton.setForeground(buttonForegroundColor);
+        mulButton.setBackground(buttonBackgroundColor);
+        mulButton.setForeground(buttonForegroundColor);
+        divButton.setBackground(buttonBackgroundColor);
+        divButton.setForeground(buttonForegroundColor);
+        decButton.setBackground(buttonBackgroundColor);
+        decButton.setForeground(buttonForegroundColor);
+        equButton.setBackground(buttonBackgroundColor);
+        equButton.setForeground(buttonForegroundColor);
+        delButton.setBackground(buttonBackgroundColor);
+        delButton.setForeground(buttonForegroundColor);
+        clrButton.setBackground(buttonBackgroundColor);
+        clrButton.setForeground(buttonForegroundColor);
+        negButton.setBackground(buttonBackgroundColor);
+        negButton.setForeground(buttonForegroundColor);
+        clearHistoryButton.setBackground(buttonBackgroundColor);
+        clearHistoryButton.setForeground(buttonForegroundColor);
 
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
@@ -107,6 +141,8 @@ public class kesuanji implements ActionListener {
             numberButtons[i].setFont(fuente);
             numberButtons[i].setFocusable(false);
             numberButtons[i].addActionListener(this);
+            numberButtons[i].setBackground(buttonBackgroundColor); // Establecer el color de fondo
+            numberButtons[i].setForeground(buttonForegroundColor); // Establecer el color de texto
         }
 
         negButton.setBounds(50, 430, 100, 50);
@@ -221,7 +257,7 @@ public class kesuanji implements ActionListener {
                         break;
                     case '/':
                         if (num2 == 0) {
-                            throw new ArithmeticException("Division by zero");
+                            throw new ArithmeticException("División entre cero");
                         }
                         result = num1 / num2;
                         break;
@@ -338,3 +374,4 @@ public class kesuanji implements ActionListener {
         updateHistoryArea(); // Actualizar el área de texto del historial
     }
 }
+
