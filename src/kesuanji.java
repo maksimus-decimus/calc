@@ -9,16 +9,20 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 public class kesuanji implements ActionListener {
 
     JFrame frame;
     JTextField textField;
+    JTextArea historyArea; // Área de texto para el historial
+    JScrollPane historyScrollPane; // Scroll para el historial
 
     JButton[] numberButtons = new JButton[10];
-    JButton[] functionButtons = new JButton[9];
+    JButton[] functionButtons = new JButton[10]; // Aumentar el tamaño para el botón de borrar historial
     JButton addButton, subButton, mulButton, divButton;
-    JButton decButton, equButton, delButton, clrButton, negButton;
+    JButton decButton, equButton, delButton, clrButton, negButton, clearHistoryButton; // Botón para borrar historial
     JPanel panel;
 
     Font fuente = new Font("Arial", Font.BOLD, 30);
@@ -27,11 +31,12 @@ public class kesuanji implements ActionListener {
 
     BufferedImage backgroundImage;
     Random random = new Random();
+    private List<String> history = new ArrayList<>(); // Lista para almacenar el historial
 
     kesuanji() {
         frame = new JFrame("Calculadora CASIO");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 550);
+        frame.setSize(900, 800); // Aumentar el tamaño para el historial
         frame.setLayout(null);
 
         // Cargar la imagen de fondo
@@ -49,7 +54,7 @@ public class kesuanji implements ActionListener {
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        backgroundPanel.setBounds(0, 0, 400, 550);
+        backgroundPanel.setBounds(0, 0, 400, 700); // Aumentar el tamaño para el historial
         frame.setContentPane(backgroundPanel);
         backgroundPanel.setLayout(null); // Establecer el layout a null para posicionar los componentes
 
@@ -58,6 +63,16 @@ public class kesuanji implements ActionListener {
         textField.setFont(fuente);
         textField.setEditable(false);
         backgroundPanel.add(textField); // Agregar al backgroundPanel
+
+        // Área de texto para el historial
+        historyArea = new JTextArea();
+        historyArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        historyArea.setEditable(false);
+
+        // Scroll para el historial
+        historyScrollPane = new JScrollPane(historyArea);
+        historyScrollPane.setBounds(50, 490, 300, 150); // Ajustar la posición y el tamaño
+        backgroundPanel.add(historyScrollPane); // Agregar al backgroundPanel
 
         addButton = new JButton("+");
         subButton = new JButton("-");
@@ -68,6 +83,7 @@ public class kesuanji implements ActionListener {
         delButton = new JButton("C");
         clrButton = new JButton("CE");
         negButton = new JButton("(-)");
+        clearHistoryButton = new JButton("Limpiar"); // Botón para borrar historial
 
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
@@ -78,8 +94,9 @@ public class kesuanji implements ActionListener {
         functionButtons[6] = delButton;
         functionButtons[7] = clrButton;
         functionButtons[8] = negButton;
+        functionButtons[9] = clearHistoryButton; // Botón para borrar historial
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             functionButtons[i].setFont(fuente);
             functionButtons[i].setFocusable(false);
             functionButtons[i].addActionListener(this);
@@ -95,6 +112,8 @@ public class kesuanji implements ActionListener {
         negButton.setBounds(50, 430, 100, 50);
         delButton.setBounds(150, 430, 100, 50);
         clrButton.setBounds(250, 430, 100, 50);
+        clearHistoryButton.setBounds(50, 650, 300, 30); // Posicionar el botón de borrar historial
+        backgroundPanel.add(clearHistoryButton); // Agregar el botón al backgroundPanel
 
         panel = new JPanel();
         panel.setBounds(50, 100, 300, 300);
@@ -210,10 +229,15 @@ public class kesuanji implements ActionListener {
 
                 // Simular animación de máquina tragaperras con el resultado
                 animateSlotMachine(String.valueOf(result));
+                String resultString = String.valueOf(result);
+                addToHistory(num1 + " " + operator + " " + num2 + " = " + resultString); // Agregar al historial
+                updateHistoryArea(); // Actualizar el área de texto del historial
                 num1 = result;
                 playSound("src/igual_a.wav"); // Reproducir sonido al presionar el botón de igual
             } catch (ArithmeticException ex) {
                 textField.setText("Syntax Error");
+                addToHistory("Syntax Error"); // Agregar al historial
+                updateHistoryArea(); // Actualizar el área de texto del historial
             }
         }
 
@@ -233,6 +257,10 @@ public class kesuanji implements ActionListener {
             double temp = Double.parseDouble(textField.getText());
             temp *= -1;
             textField.setText(String.valueOf(temp));
+        }
+
+        if (e.getSource() == clearHistoryButton) {
+            clearHistory(); // Borrar el historial
         }
     }
 
@@ -285,5 +313,28 @@ public class kesuanji implements ActionListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // Método para agregar una entrada al historial
+    private void addToHistory(String entry) {
+        history.add(entry);
+        if (history.size() > 10) { // Limitar el historial a 10 entradas
+            history.remove(0);
+        }
+    }
+
+    // Método para actualizar el área de texto del historial
+    private void updateHistoryArea() {
+        StringBuilder historyText = new StringBuilder();
+        for (String entry : history) {
+            historyText.append(entry).append("\n");
+        }
+        historyArea.setText(historyText.toString());
+    }
+
+    // Método para borrar el historial
+    private void clearHistory() {
+        history.clear(); // Limpiar la lista del historial
+        updateHistoryArea(); // Actualizar el área de texto del historial
     }
 }
