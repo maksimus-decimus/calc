@@ -16,45 +16,41 @@ import java.util.List;
 
 public class KJ_UI extends JFrame implements ActionListener, KeyListener {
 
-    private KJ_BE backend = new KJ_BE(); // Instancia del backend
+    private KJ_BE backend = new KJ_BE();
 
-    // Componentes visuales
     JFrame frame;
     JTextField textField;
-    JTextArea historyArea; // Área de texto para el historial
-    JScrollPane historyScrollPane; // Scroll para el historial
-    JLabel gifLabel; // Label para mostrar el GIF
+    JTextArea historyArea;
+    JScrollPane historyScrollPane;
+    JLabel gifLabel;
 
     private double num1, num2, result;
     private char operator;
     JButton[] numberButtons = new JButton[10];
-    JButton[] functionButtons = new JButton[15]; // Aumentar el tamaño para las nuevas funciones
+    JButton[] functionButtons = new JButton[15];
     JButton addButton, subButton, mulButton, divButton;
-    JButton decButton, equButton, delButton, clrButton, negButton; // Botón para borrar historial
-    JButton piButton, cosButton, tanButton, sqrButton, clearHistoryButton; // Nuevos botones
+    JButton decButton, equButton, delButton, clrButton, negButton;
+    JButton piButton, cosButton, tanButton, sqrButton, clearHistoryButton;
     JPanel panel;
 
     Font fuente = new Font("Arial", Font.BOLD, 30);
 
     BufferedImage backgroundImage;
     Random random = new Random();
-    // private List<String> history = new ArrayList<>(); // Lista para almacenar el
-    // historial
+   
 
     public KJ_UI() {
         frame = new JFrame("Niño calculadora");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 700); // Aumentar el tamaño para el historial
+        frame.setSize(1000, 700);
         frame.setLayout(null);
 
-        // Cargar la imagen de fondo
         try {
             backgroundImage = ImageIO.read(new File("src/fondo.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Crear un JPanel personalizado para dibujar la imagen de fondo
         JPanel backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -62,31 +58,28 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        backgroundPanel.setBounds(0, 0, 500, 700); // Aumentar el tamaño para el historial
+        backgroundPanel.setBounds(0, 0, 500, 700);
         frame.setContentPane(backgroundPanel);
-        backgroundPanel.setLayout(null); // Establecer el layout a null para posicionar los componentes
+        backgroundPanel.setLayout(null);
 
         textField = new JTextField();
         textField.setBounds(50, 25, 400, 50);
         textField.setFont(fuente);
         textField.setEditable(false);
-        backgroundPanel.add(textField); // Agregar al backgroundPanel
+        backgroundPanel.add(textField);
 
-        // Área de texto para el historial
         historyArea = new JTextArea();
         historyArea.setFont(new Font("Arial", Font.PLAIN, 16));
         historyArea.setEditable(false);
 
-        // Scroll para el historial
         historyScrollPane = new JScrollPane(historyArea);
-        historyScrollPane.setBounds(50, 490, 400, 150); // Ajustar la posición y el tamaño
-        backgroundPanel.add(historyScrollPane); // Agregar al backgroundPanel
+        historyScrollPane.setBounds(50, 490, 400, 150);
+        backgroundPanel.add(historyScrollPane);
 
-        // Label para mostrar el GIF
         gifLabel = new JLabel();
-        gifLabel.setBounds(50, 100, 300, 300); // Ajustar la posición y el tamaño
-        gifLabel.setVisible(false); // Inicialmente invisible
-        backgroundPanel.add(gifLabel); // Agregar al backgroundPanel
+        gifLabel.setBounds(50, 100, 300, 300);
+        gifLabel.setVisible(false);
+        backgroundPanel.add(gifLabel);
 
         addButton = new JButton("+");
         subButton = new JButton("-");
@@ -96,24 +89,22 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
         equButton = new JButton("=");
         delButton = new JButton("C");
         clrButton = new JButton("CE");
-        negButton = new JButton("(+/-)");
-        clearHistoryButton = new JButton("Limpiar"); // Botón para borrar historial
+        negButton = new JButton("(-)");
+        clearHistoryButton = new JButton("Limpiar");
         piButton = new JButton("π");
         cosButton = new JButton("cos");
         tanButton = new JButton("tan");
         sqrButton = new JButton("sqr");
 
-        // Establecer el color de fondo a gris y el color de texto a blanco
         Color buttonBackgroundColor = Color.BLACK;
         Color buttonForegroundColor = Color.WHITE;
-        Color operationButtonColor = new Color(255, 128, 0); // Naranja suave (PeachPuff)
-        Border roundedBorder = new LineBorder(buttonBackgroundColor, 1, true); // Borde redondeado
+        Color operationButtonColor = new Color(255, 128, 0);
+        Border roundedBorder = new LineBorder(buttonBackgroundColor, 1, true);
 
-        // Establecer el color de fondo y el color de texto para los botones de función
         addButton.setBackground(operationButtonColor);
         addButton.setForeground(buttonBackgroundColor);
-        addButton.setFocusPainted(false); // Eliminar el focus border
-        addButton.setBorder(roundedBorder); // Establecer el borde redondeado
+        addButton.setFocusPainted(false);
+        addButton.setBorder(roundedBorder);
 
         subButton.setBackground(operationButtonColor);
         subButton.setForeground(buttonBackgroundColor);
@@ -160,7 +151,7 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
         clearHistoryButton.setFocusPainted(false);
         clearHistoryButton.setBorder(roundedBorder);
 
-        piButton.setBackground(new Color(0, 0, 255)); // Rosa claro (LightPink)
+        piButton.setBackground(new Color(0, 0, 255));
         piButton.setForeground(buttonForegroundColor);
         piButton.setFocusPainted(false);
         piButton.setBorder(roundedBorder);
@@ -205,10 +196,10 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
             numberButtons[i].setFont(fuente);
             numberButtons[i].setFocusable(false);
             numberButtons[i].addActionListener(this);
-            numberButtons[i].setBackground(buttonBackgroundColor); // Establecer el color de fondo
-            numberButtons[i].setForeground(buttonForegroundColor); // Establecer el color de texto
-            numberButtons[i].setFocusPainted(false); // Eliminar el focus border
-            numberButtons[i].setBorder(roundedBorder); // Establecer el borde redondeado
+            numberButtons[i].setBackground(buttonBackgroundColor);
+            numberButtons[i].setForeground(buttonForegroundColor);
+            numberButtons[i].setFocusPainted(false);
+            numberButtons[i].setBorder(roundedBorder);
         }
 
         negButton.setBounds(50, 430, 100, 50);
@@ -224,7 +215,7 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
         panel.setBounds(50, 100, 400, 260);
         panel.setLayout(new GridLayout(4, 4, 10, 10));
         panel.setBackground(Color.LIGHT_GRAY);
-        panel.setOpaque(false); // Hacer el panel transparente
+        panel.setOpaque(false);
 
         panel.add(numberButtons[7]);
         panel.add(numberButtons[8]);
@@ -246,10 +237,10 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
         panel.add(equButton);
         panel.add(divButton);
 
-        backgroundPanel.add(panel); // Agregar al backgroundPanel
-        backgroundPanel.add(negButton); // Agregar al backgroundPanel
-        backgroundPanel.add(delButton); // Agregar al backgroundPanel
-        backgroundPanel.add(clrButton); // Agregar al backgroundPanel
+        backgroundPanel.add(panel);
+        backgroundPanel.add(negButton);
+        backgroundPanel.add(delButton);
+        backgroundPanel.add(clrButton);
         backgroundPanel.add(piButton);
         backgroundPanel.add(cosButton);
         backgroundPanel.add(tanButton);
@@ -257,9 +248,9 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
         backgroundPanel.add(clearHistoryButton);
 
         frame.setVisible(true);
-        frame.addKeyListener(this); // Agregar el KeyListener al JFrame
-        frame.setFocusable(true); // Asegurarse de que el JFrame pueda recibir eventos de teclado
-        frame.requestFocusInWindow(); // Solicitar el foco para que el JFrame reciba los eventos
+        frame.addKeyListener(this);
+        frame.setFocusable(true);
+        frame.requestFocusInWindow();
 
     }
 
@@ -361,7 +352,7 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
         }
 
         if (e.getSource() == clearHistoryButton) {
-            clearHistory(); // Borrar el historial
+            clearHistory();
         }
 
         if (e.getSource() == piButton) {
@@ -385,14 +376,13 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
     }
 
     private void tragaperras(String result) {
-        final Timer timer = new Timer(50, null); // Intervalo de 50ms
-        final String[] symbols = { "@", "#", "$", "%", "&", "*", "+", "=", "?", "!" }; // Símbolos para la animación
-        final int animationDuration = 30; // Duración de la animación (30 iteraciones)
-        final String finalResult = result; // Resultado final de la operación
-        final int numColumns = 4; // Número de columnas
-        final String[][] columnSymbols = new String[numColumns][10]; // Matriz para almacenar los símbolos de cada columna
+        final Timer timer = new Timer(50, null);
+        final String[] symbols = { "@", "#", "$", "%", "&", "*", "+", "=", "?", "!" };
+        final int animationDuration = 30;
+        final String finalResult = result;
+        final int numColumns = 4;
+        final String[][] columnSymbols = new String[numColumns][10];
 
-        // Inicializar la matriz de símbolos
         for (int i = 0; i < numColumns; i++) {
             for (int j = 0; j < 10; j++) {
                 columnSymbols[i][j] = symbols[random.nextInt(symbols.length)];
@@ -401,21 +391,21 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
 
         timer.addActionListener(new ActionListener() {
             int count = 0;
-            int[] offsets = new int[numColumns]; // Desplazamiento para cada columna
+            int[] offsets = new int[numColumns];
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 count++;
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < numColumns; i++) {
-                    offsets[i] = (offsets[i] + 1) % 10; // Desplazar el offset
-                    sb.append(columnSymbols[i][offsets[i]]).append(" "); // Símbolo de la columna
+                    offsets[i] = (offsets[i] + 1) % 10;
+                    sb.append(columnSymbols[i][offsets[i]]).append(" ");
                 }
-                textField.setText(sb.toString()); // Mostrar símbolos
+                textField.setText(sb.toString());
 
-                if (count >= animationDuration) { // Duración de la animación
+                if (count >= animationDuration) {
                     timer.stop();
-                    textField.setText(finalResult); // Mostrar el resultado final
+                    textField.setText(finalResult);
                 }
             }
         });
@@ -435,13 +425,11 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
         }
     }
 
-    // Método para agregar una entrada al historial
     private void addToHistory(String entry) {
         backend.addToHistory(entry);
 
     }
 
-    // Método para actualizar el área de texto del historial
     private void updateHistoryArea() {
         StringBuilder historyText = new StringBuilder();
         for (String entry : backend.getHistory()) {
@@ -450,24 +438,23 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
         historyArea.setText(historyText.toString());
     }
 
-    // Método para borrar el historial
     private void clearHistory() {
-        backend.clearHistory(); // Limpiar la lista del historial
-        updateHistoryArea(); // Actualizar el área de texto del historial
+        backend.clearHistory();
+        updateHistoryArea();
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
         char c = e.getKeyChar();
-        if (Character.isDigit(c) || c == '.') { // Si es un dígito o un punto
-            textField.setText(textField.getText() + c); // Agregar al textField
-        } else if (c == '+' || c == '-' || c == '*' || c == '/') { // Si es un operador
+        if (Character.isDigit(c) || c == '.') {
+            textField.setText(textField.getText() + c);
+        } else if (c == '+' || c == '-' || c == '*' || c == '/') {
             if (!textField.getText().isEmpty()) {
                 num1 = Double.parseDouble(textField.getText());
             }
-            operator = c; // Establecer el operador
-            textField.setText(""); // Limpiar el textField
-        } else if (c == KeyEvent.VK_ENTER) { // Si es la tecla Enter
+            operator = c;
+            textField.setText("");
+        } else if (c == KeyEvent.VK_ENTER) {
             try {
                 num2 = Double.parseDouble(textField.getText());
                 result = backend.operate(num1, num2, operator);
@@ -480,7 +467,7 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
                 backend.addToHistory("Syntax Error");
                 updateHistoryArea();
             }
-        } else if (c == KeyEvent.VK_BACK_SPACE) { // Si es la tecla de retroceso
+        } else if (c == KeyEvent.VK_BACK_SPACE) {
             String string = textField.getText();
             textField.setText("");
             for (int i = 0; i < string.length() - 1; i++) {
@@ -491,11 +478,9 @@ public class KJ_UI extends JFrame implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // No necesitamos implementar este método en este caso
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // No necesitamos implementar este método en este caso
     }
 }
