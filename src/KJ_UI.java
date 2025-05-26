@@ -13,33 +13,36 @@ import javax.sound.sampled.Clip;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ImageIcon;
 
-public class kesuanji implements ActionListener {
+public class KJ_UI extends JFrame implements ActionListener, KeyListener {
 
+    private KJ_BE backend = new KJ_BE(); // Instancia del backend
+
+    // Componentes visuales
     JFrame frame;
     JTextField textField;
     JTextArea historyArea; // Área de texto para el historial
     JScrollPane historyScrollPane; // Scroll para el historial
     JLabel gifLabel; // Label para mostrar el GIF
 
+    private double num1, num2, result;
+    private char operator;
     JButton[] numberButtons = new JButton[10];
     JButton[] functionButtons = new JButton[15]; // Aumentar el tamaño para las nuevas funciones
     JButton addButton, subButton, mulButton, divButton;
-    JButton decButton, equButton, delButton, clrButton, negButton, clearHistoryButton; // Botón para borrar historial
-    JButton piButton, cosButton, tanButton, sqrButton; // Nuevos botones
+    JButton decButton, equButton, delButton, clrButton, negButton; // Botón para borrar historial
+    JButton piButton, cosButton, tanButton, sqrButton, clearHistoryButton; // Nuevos botones
     JPanel panel;
 
     Font fuente = new Font("Arial", Font.BOLD, 30);
-    double num1, num2, result;
-    char operator;
 
     BufferedImage backgroundImage;
     Random random = new Random();
-    private List<String> history = new ArrayList<>(); // Lista para almacenar el historial
+    // private List<String> history = new ArrayList<>(); // Lista para almacenar el
+    // historial
 
-    kesuanji() {
-        frame = new JFrame("Calculadora CASIO");
+    public KJ_UI() {
+        frame = new JFrame("Niño calculadora");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 700); // Aumentar el tamaño para el historial
         frame.setLayout(null);
@@ -93,7 +96,7 @@ public class kesuanji implements ActionListener {
         equButton = new JButton("=");
         delButton = new JButton("C");
         clrButton = new JButton("CE");
-        negButton = new JButton("(-)");
+        negButton = new JButton("(+/-)");
         clearHistoryButton = new JButton("Limpiar"); // Botón para borrar historial
         piButton = new JButton("π");
         cosButton = new JButton("cos");
@@ -103,8 +106,8 @@ public class kesuanji implements ActionListener {
         // Establecer el color de fondo a gris y el color de texto a blanco
         Color buttonBackgroundColor = Color.BLACK;
         Color buttonForegroundColor = Color.WHITE;
-        Color operationButtonColor = new Color(255, 228, 181); // Naranja suave (PeachPuff)
-        Border roundedBorder = new LineBorder(buttonBackgroundColor, 5, true); // Borde redondeado
+        Color operationButtonColor = new Color(255, 128, 0); // Naranja suave (PeachPuff)
+        Border roundedBorder = new LineBorder(buttonBackgroundColor, 1, true); // Borde redondeado
 
         // Establecer el color de fondo y el color de texto para los botones de función
         addButton.setBackground(operationButtonColor);
@@ -157,26 +160,25 @@ public class kesuanji implements ActionListener {
         clearHistoryButton.setFocusPainted(false);
         clearHistoryButton.setBorder(roundedBorder);
 
-        piButton.setBackground(buttonBackgroundColor);
+        piButton.setBackground(new Color(0, 0, 255)); // Rosa claro (LightPink)
         piButton.setForeground(buttonForegroundColor);
         piButton.setFocusPainted(false);
         piButton.setBorder(roundedBorder);
 
-        cosButton.setBackground(buttonBackgroundColor);
+        cosButton.setBackground(new Color(0, 0, 255));
         cosButton.setForeground(buttonForegroundColor);
         cosButton.setFocusPainted(false);
         cosButton.setBorder(roundedBorder);
 
-        tanButton.setBackground(buttonBackgroundColor);
+        tanButton.setBackground(new Color(0, 0, 255));
         tanButton.setForeground(buttonForegroundColor);
         tanButton.setFocusPainted(false);
         tanButton.setBorder(roundedBorder);
 
-        sqrButton.setBackground(buttonBackgroundColor);
+        sqrButton.setBackground(new Color(0, 0, 255));
         sqrButton.setForeground(buttonForegroundColor);
         sqrButton.setFocusPainted(false);
         sqrButton.setBorder(roundedBorder);
-
         functionButtons[0] = addButton;
         functionButtons[1] = subButton;
         functionButtons[2] = mulButton;
@@ -186,11 +188,11 @@ public class kesuanji implements ActionListener {
         functionButtons[6] = delButton;
         functionButtons[7] = clrButton;
         functionButtons[8] = negButton;
-        functionButtons[9] = clearHistoryButton; // Botón para borrar historial
-        functionButtons[10] = piButton;
-        functionButtons[11] = cosButton;
-        functionButtons[12] = tanButton;
-        functionButtons[13] = sqrButton;
+        functionButtons[9] = piButton;
+        functionButtons[10] = cosButton;
+        functionButtons[11] = tanButton;
+        functionButtons[12] = sqrButton;
+        functionButtons[13] = clearHistoryButton;
 
         for (int i = 0; i < 14; i++) {
             functionButtons[i].setFont(fuente);
@@ -252,12 +254,13 @@ public class kesuanji implements ActionListener {
         backgroundPanel.add(cosButton);
         backgroundPanel.add(tanButton);
         backgroundPanel.add(sqrButton);
+        backgroundPanel.add(clearHistoryButton);
 
         frame.setVisible(true);
-    }
+        frame.addKeyListener(this); // Agregar el KeyListener al JFrame
+        frame.setFocusable(true); // Asegurarse de que el JFrame pueda recibir eventos de teclado
+        frame.requestFocusInWindow(); // Solicitar el foco para que el JFrame reciba los eventos
 
-    public static void main(String[] args) {
-        kesuanji calc = new kesuanji();
     }
 
     @Override
@@ -288,63 +291,54 @@ public class kesuanji implements ActionListener {
         }
 
         if (e.getSource() == addButton) {
-            num1 = Double.parseDouble(textField.getText());
+            if (!textField.getText().isEmpty()) {
+                num1 = Double.parseDouble(textField.getText());
+            }
             operator = '+';
             textField.setText("");
         }
 
         if (e.getSource() == subButton) {
-            num1 = Double.parseDouble(textField.getText());
+            if (!textField.getText().isEmpty()) {
+                num1 = Double.parseDouble(textField.getText());
+            }
             operator = '-';
             textField.setText("");
         }
 
         if (e.getSource() == mulButton) {
-            num1 = Double.parseDouble(textField.getText());
+            if (!textField.getText().isEmpty()) {
+                num1 = Double.parseDouble(textField.getText());
+            }
             operator = '*';
             textField.setText("");
             playSound("src/whatsapp.wav");
         }
 
         if (e.getSource() == divButton) {
-            num1 = Double.parseDouble(textField.getText());
+            if (!textField.getText().isEmpty()) {
+                num1 = Double.parseDouble(textField.getText());
+            }
             operator = '/';
             textField.setText("");
         }
 
         if (e.getSource() == equButton) {
+
             try {
                 num2 = Double.parseDouble(textField.getText());
+                result = backend.operate(num1, num2, operator);
 
-                switch (operator) {
-                    case '+':
-                        result = num1 + num2;
-                        break;
-                    case '-':
-                        result = num1 - num2;
-                        break;
-                    case '*':
-                        result = num1 * num2;
-                        break;
-                    case '/':
-                        if (num2 == 0) {
-                            throw new ArithmeticException("División entre cero");
-                        }
-                        result = num1 / num2;
-                        break;
-                }
-
-                // Simular animación de máquina tragaperras con el resultado
                 tragaperras(String.valueOf(result));
                 String resultString = String.valueOf(result);
-                addToHistory(num1 + " " + operator + " " + num2 + " = " + resultString); // Agregar al historial
-                updateHistoryArea(); // Actualizar el área de texto del historial
+                backend.addToHistory(num1 + " " + operator + " " + num2 + " = " + resultString);
+                updateHistoryArea();
                 num1 = result;
-                playSound("src/igual_a.wav"); // Reproducir sonido al presionar el botón de igual
+                playSound("src/igual_a.wav");
             } catch (ArithmeticException ex) {
                 textField.setText("Syntax Error");
-                addToHistory("Syntax Error"); // Agregar al historial
-                updateHistoryArea(); // Actualizar el área de texto del historial
+                backend.addToHistory("Syntax Error");
+                updateHistoryArea();
             }
         }
 
@@ -371,28 +365,28 @@ public class kesuanji implements ActionListener {
         }
 
         if (e.getSource() == piButton) {
-            textField.setText(textField.getText() + Math.PI);
+            textField.setText(String.valueOf(backend.pi()));
         }
 
         if (e.getSource() == cosButton) {
-            num1 = Double.parseDouble(textField.getText());
-            textField.setText(String.valueOf(Math.cos(num1)));
+            double val = Double.parseDouble(textField.getText());
+            textField.setText(String.valueOf(backend.cos(val)));
         }
 
         if (e.getSource() == tanButton) {
-            num1 = Double.parseDouble(textField.getText());
-            textField.setText(String.valueOf(Math.tan(num1)));
+            double val = Double.parseDouble(textField.getText());
+            textField.setText(String.valueOf(backend.tan(val)));
         }
 
         if (e.getSource() == sqrButton) {
-            num1 = Double.parseDouble(textField.getText());
-            textField.setText(String.valueOf(num1 * num1));
+            double val = Double.parseDouble(textField.getText());
+            textField.setText(String.valueOf(backend.sqr(val)));
         }
     }
 
     private void tragaperras(String result) {
         final Timer timer = new Timer(50, null); // Intervalo de 50ms
-        final String[] symbols = {"@", "#", "$", "%", "&", "*", "+", "=", "?", "!"}; //Símbolos para la animación
+        final String[] symbols = { "@", "#", "$", "%", "&", "*", "+", "=", "?", "!" }; // Símbolos para la animación
         final int animationDuration = 30; // Duración de la animación (30 iteraciones)
         final String finalResult = result; // Resultado final de la operación
         final int numColumns = 4; // Número de columnas
@@ -443,16 +437,14 @@ public class kesuanji implements ActionListener {
 
     // Método para agregar una entrada al historial
     private void addToHistory(String entry) {
-        history.add(entry);
-        if (history.size() > 10) { // Limitar el historial a 10 entradas
-            history.remove(0);
-        }
+        backend.addToHistory(entry);
+
     }
 
     // Método para actualizar el área de texto del historial
     private void updateHistoryArea() {
         StringBuilder historyText = new StringBuilder();
-        for (String entry : history) {
+        for (String entry : backend.getHistory()) {
             historyText.append(entry).append("\n");
         }
         historyArea.setText(historyText.toString());
@@ -460,7 +452,50 @@ public class kesuanji implements ActionListener {
 
     // Método para borrar el historial
     private void clearHistory() {
-        history.clear(); // Limpiar la lista del historial
+        backend.clearHistory(); // Limpiar la lista del historial
         updateHistoryArea(); // Actualizar el área de texto del historial
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char c = e.getKeyChar();
+        if (Character.isDigit(c) || c == '.') { // Si es un dígito o un punto
+            textField.setText(textField.getText() + c); // Agregar al textField
+        } else if (c == '+' || c == '-' || c == '*' || c == '/') { // Si es un operador
+            if (!textField.getText().isEmpty()) {
+                num1 = Double.parseDouble(textField.getText());
+            }
+            operator = c; // Establecer el operador
+            textField.setText(""); // Limpiar el textField
+        } else if (c == KeyEvent.VK_ENTER) { // Si es la tecla Enter
+            try {
+                num2 = Double.parseDouble(textField.getText());
+                result = backend.operate(num1, num2, operator);
+                textField.setText(String.valueOf(result));
+                backend.addToHistory(num1 + " " + operator + " " + num2 + " = " + result);
+                updateHistoryArea();
+                num1 = result;
+            } catch (ArithmeticException ex) {
+                textField.setText("Syntax Error");
+                backend.addToHistory("Syntax Error");
+                updateHistoryArea();
+            }
+        } else if (c == KeyEvent.VK_BACK_SPACE) { // Si es la tecla de retroceso
+            String string = textField.getText();
+            textField.setText("");
+            for (int i = 0; i < string.length() - 1; i++) {
+                textField.setText(textField.getText() + string.charAt(i));
+            }
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // No necesitamos implementar este método en este caso
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // No necesitamos implementar este método en este caso
     }
 }
